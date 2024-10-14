@@ -9,7 +9,7 @@ import hlp, c3_binder::cfg;
  */
 struct Data
 {
-  Context current_context;
+  ContextList contexts;
   File src_file;
   File out_file;
 }
@@ -19,7 +19,7 @@ fn void! main(String[] args)
 {
   Data data;
 	init(&data, args)!;
-  generateModule(&data)!;
+  generateModule(data.src_file, data.out_file, &data.contexts)!;
   defer cleanup(&data);
 }
 

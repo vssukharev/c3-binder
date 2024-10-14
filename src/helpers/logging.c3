@@ -12,7 +12,7 @@ macro printFuncInfo(...)
   io::print($$FUNC);
   io::print(" : ");
   $for (var $i = 0; $i < $vacount; ++$i)
-    io::printf("%s", $vaarg[$i]);
+    printArg($vaarg[$i]);
   $endfor
 }
 
@@ -34,7 +34,7 @@ macro printFuncErr(...)
   io::print($$FUNC);
   io::print(" : ");
   $for (var $i = 0; $i < $vacount; ++$i)
-    io::printf("%s", $vaarg[$i]);
+    printArg($vaarg[$i]);
   $endfor
 }
 
@@ -54,7 +54,7 @@ macro printUserErr(...)
 {
   io::print("[ERROR] "); 
   $for (var $i = 0; $i < $vacount; ++$i)
-    io::printf("%s", $vaarg[$i]);
+    printArg($vaarg[$i]);
   $endfor
 }
 
@@ -73,8 +73,9 @@ macro printUserErrN(...)
 macro printUserInfo(...)
 {
   io::print("[INFO] "); 
-  $for (var $i = 0; $i < $vacount; ++$i)
-    io::printf("%s", $vaarg[$i]);
+  $for (var $i = 0; $i < $vacount; ++$i) {
+    printArg($vaarg[$i]);
+  }
   $endfor
 }
 
@@ -110,4 +111,14 @@ macro printCharSliceN(char[] arr)
   io::printn();
 }
 
+macro printArg(arg) @local 
+{
+  $switch ($typeof(arg).typeid) 
+    $case ichar.typeid:
+    $case char.typeid:
+      io::printf("%c", arg);
+    $default:
+      io::printf("%s", arg);
+  $endswitch
+}
 
