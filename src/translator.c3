@@ -26,8 +26,11 @@ fn void! transFile(
     return ProgramErr.PARSE_ERROR?;
   }
 
-  io::eprintn("--- running diagnostics ---");
+  io::eprintn("--- Running diagnostics ---");
   runDiagnostics(tu);
-  io::eprintn("--- stopping diagnostics ---");
+  io::eprintn("--- Stopping diagnostics ---");
+
+  
+
 }
 

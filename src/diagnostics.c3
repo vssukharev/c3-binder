@@ -2,9 +2,19 @@
 module binder;
 import std::io, clang;
 
-fn void runDiagnostics(
+/**
+ * Runs diagnostics and merely log them
+ * if some errors occured
+ *
+ * @param tu "Translation unit to be diagnosed"
+ *
+ * @return "Quantity of errors occured"
+ */
+fn uint runDiagnostics(
   CXTranslationUnit tu)
 {
+  uint errors_count;
+  
   CXDiagnosticSet diag_set = clang::getDiagnosticSetFromTU(tu);
   defer clang::disposeDiagnosticSet(diag_set);
   uint diag_set_len = clang::getNumDiagnosticsInSet(diag_set);
@@ -30,8 +40,11 @@ fn void runDiagnostics(
         line,
         clang::getCString(spelling)
       );
+
+      ++errors_count;
     }
   }
 
+  return errors_count;
 }
 
