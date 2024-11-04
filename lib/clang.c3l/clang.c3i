@@ -2162,17 +2162,17 @@ struct CXIndexOptions {
     /*
      * \see clang_createIndex()
      */
-    bool exclude_declarations_from_pch : 0;
+    bool exclude_declarations_from_pch;
 
     /*
      * \see clang_createIndex()
      */
-    bool display_diagnostics : 1;
+    bool display_diagnostics;
 
     /*
      * Store PCH in memory. If zero, PCH are stored in temporary files.
      */
-    bool store_preambles_in_memory : 2;
+    bool store_preambles_in_memory;
   }
 
   /*
