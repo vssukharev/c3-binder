@@ -1,17 +1,17 @@
 
 module binder;
-import utils::err, clang, std::io;
+import utils, clang, std::io;
 
 // Entry point
 fn void! main(String[] args) 
 {
-  File out;
-  String in_name;
+  File out_file_handle;
+  String in_file_name;
   
-  parseCommandArgs(args, &out, &in_name)!;
-  defer (void) out.close();
+  arg::parseCommandArgs(args, &out_file_handle, &in_file_name)!;
+  defer (void) out_file_handle.close();
   
-  transFile(in_name, &out)!;
+  trans::transFile(in_file_name, &out_file_handle)!;
 }
 
 

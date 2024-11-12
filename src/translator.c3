@@ -1,10 +1,6 @@
 
-module binder;
-import std::io, clang, utils::err;
-
-struct CursorVisitData {
-  int a;
-}
+module binder::trans;
+import std::io, clang, utils, diags;
 
 /**
  * Translates 'in_file_name' and writes 
@@ -27,10 +23,7 @@ fn void! transFile(
     (ZString) in_file_name,
     null, 0,
     null, 0,
-    clang::TRANSLATION_UNIT_DETAILED_PREPROCESSING_RECORD |
-    clang::TRANSLATION_UNIT_INCLUDE_ATTRIBUTED_TYPES |
-    clang::TRANSLATION_UNIT_RETAIN_EXCLUDED_CONDITIONAL_BLOCKS |
-    clang::TRANSLATION_UNIT_SINGLE_FILE_PARSE
+    TRANSLATION_UNIT_PARSE_FLAGS
   );
 
   if (tu == null) {
@@ -38,20 +31,27 @@ fn void! transFile(
     return ProgramErr.PARSE_ERROR?;
   }
 
-  io::eprintn("--- Running diagnostics ---");
-  runDiagnostics(tu);
-  io::eprintn("--- Stopping diagnostics ---");
+  io::eprintn("--- Run diagnostics ---");
+  
+  if (diags::run(tu) != 0) {
+    io::eprintn("--- Some diagnostics failed ---");
+    return ProgramErr.DIAGNOSTICS?;
+  }
+
+  io::eprintn("--- Stop diagnostics ---");
 
   CXCursor cursor = clang::getTranslationUnitCursor(tu);
   CursorVisitData visit_data = {};
 
-  io::eprintn("--- Running visiting ---");
+  io::eprintn("--- Visiting children ---");
+  
   clang::visitChildren(
     cursor,
     &mainVisitor,
     (CXClientData) &visit_data
   );
-  io::eprintn("--- Stopping visiting ---");
+  
+  io::eprintn("--- Stop visiting ---");
 }
 
 /**

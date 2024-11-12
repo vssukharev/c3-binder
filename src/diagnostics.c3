@@ -1,8 +1,8 @@
 
-module binder;
+module binder::diags;
 import std::io, clang;
 
-/**
+/*
  * Runs diagnostics and merely log them
  * if some errors occured
  *
@@ -10,7 +10,7 @@ import std::io, clang;
  *
  * @return "Quantity of errors occured"
  */
-fn uint runDiagnostics(
+fn uint run(
   CXTranslationUnit tu)
 {
   uint errors_count;

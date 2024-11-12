@@ -1,5 +1,5 @@
 
-module binder;
+module utils::arg;
 import utils::err, std::io;
 
 /**

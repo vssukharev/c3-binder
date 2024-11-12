@@ -883,7 +883,7 @@ const CXCompilationDatabase_Error COMPILATION_DATABASE_CAN_NOT_LOAD_DATA_BASE = 
  *
  * It must be freed by \c clang_CompilationDatabase_dispose.
  */
-fn CXCompilationDatabase fromDirectoryCompilationDatabase(
+fn CXCompilationDatabase fromDirectory_CompilationDatabase(
   ZString build_dir, 
   CXCompilationDatabase_Error* error_code) 
 @extern("clang_CompilationDatabase_fromDirectory");
