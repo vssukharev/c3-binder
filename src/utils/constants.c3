@@ -1,5 +1,6 @@
 
-module binder::consts;
+module binder::utils::consts;
+import clang;
 
 const TRANSLATION_UNIT_PARSE_FLAGS =
   clang::TRANSLATION_UNIT_DETAILED_PREPROCESSING_RECORD

@@ -1,5 +1,5 @@
 
-module binder::faults;
+module binder::utils::faults;
 import std::io;
 
 fault ProgramErr {

@@ -1,6 +1,10 @@
 
 module binder::trans;
-import std::io, clang, utils, diags;
+import std::io, clang, binder::utils, binder::diags;
+
+struct CursorVisitData {
+  int a;
+}
 
 /**
  * Translates 'in_file_name' and writes 
@@ -23,7 +27,7 @@ fn void! transFile(
     (ZString) in_file_name,
     null, 0,
     null, 0,
-    TRANSLATION_UNIT_PARSE_FLAGS
+    consts::TRANSLATION_UNIT_PARSE_FLAGS
   );
 
   if (tu == null) {
