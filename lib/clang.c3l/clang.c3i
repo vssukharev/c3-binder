@@ -2668,7 +2668,7 @@ fn CXTranslationUnit parseTranslationUnit(
  * Parse the given source file and the translation unit corresponding
  * to that file.
  *
- * This routine is the main entry poCInt for the Clang C API, providing the
+ * This routine is the main entry point for the Clang C API, providing the
  * ability to parse a source file into a translation unit that can then be
  * queried by other functions in the API. This routine accepts a set of
  * command-line arguments so that the compilation can be configured in the same
@@ -3301,7 +3301,7 @@ const CXCursorKind CURSOR_BLOCK_EXPR = 105;
  */
 const CXCursorKind CURSOR_INTEGER_LITERAL = 106;
 
-/** A floating poCInt number literal.
+/** A floating point number literal.
  */
 const CXCursorKind CURSOR_FLOATING_LITERAL = 107;
 
@@ -3528,7 +3528,7 @@ const CXCursorKind CURSOR_OMP_ARRAY_SECTION_EXPR = 147;
 const CXCursorKind CURSOR_OBJC_AVAILABILITY_CHECK_EXPR = 148;
 
 /**
- * Fixed poCInt literal
+ * Fixed point literal
  */
 const CXCursorKind CURSOR_FIXED_POINT_LITERAL = 149;
 
@@ -3808,7 +3808,7 @@ const CXCursorKind CURSOR_OMP_TEAMS_DIRECTIVE = 253;
  */
 const CXCursorKind CURSOR_OMP_TASKGROUP_DIRECTIVE = 254;
 
-/** OpenMP cancellation poCInt directive.
+/** OpenMP cancellation point directive.
  */
 const CXCursorKind CURSOR_OMP_CANCELLATION_POINT_DIRECTIVE = 255;
 
@@ -6242,7 +6242,7 @@ fn CInt getObjCSelectorIndex_Cursor(
  * For an Objective-C message: the receiver is an object instance, not 'super'
  * or a specific class.
  *
- * If the method/message is "static" or the cursor does not poCInt to a
+ * If the method/message is "static" or the cursor does not point to a
  * method/message, it will return zero.
  */
 fn CInt isDynamicCall_Cursor(
@@ -6899,7 +6899,7 @@ fn CXSourceRange clang_getTokenExtent(CXTranslationUnit, CXToken);
  * \param Range the source range in which text should be tokenized. All of the
  * tokens produced by tokenization will fall within this source range,
  *
- * \param Tokens this pointer will be set to poCInt to the array of tokens
+ * \param Tokens this pointer will be set to point to the array of tokens
  * that occur within the given source range. The returned pointer must be
  * freed with clang_disposeTokens() before the translation unit is destroyed.
  *
@@ -7117,11 +7117,11 @@ const CXCompletionChunkKind COMPLETION_CHUNK_INFORMATIVE = 4;
  * CInt add(CInt x, CInt y);
  * \endcode
  *
- * and the source code \c add(, where the code-completion poCInt is after the
+ * and the source code \c add(, where the code-completion point is after the
  * "(", the code-completion string will contain a "current parameter" chunk
  * for "CInt x", indicating that the current argument will initialize that
  * parameter. After typing further, to \c add(17, (where the code-completion
- * poCInt is after the ","), the code-completion string will contain a
+ * point is after the ","), the code-completion string will contain a
  * "current parameter" chunk to "CInt y".
  */
 const CXCompletionChunkKind COMPLETION_CHUNK_CURRENT_PARAMETER = 5;
@@ -7394,12 +7394,12 @@ fn CUInt getCompletionNumFixIts(
  * fix-its, the following conditions are guaranteed to hold for
  * replacement_range of the stored fix-its:
  *  - Ranges in the fix-its are guaranteed to never contain the completion
- *  poCInt (or identifier under completion point, if any) inside them, except
+ *  point (or identifier under completion point, if any) inside them, except
  *  at the start or at the end of the range.
- *  - If a fix-it range starts or ends with completion poCInt (or starts or
+ *  - If a fix-it range starts or ends with completion point (or starts or
  *  ends after the identifier under completion point), it will contain at
  *  least one character. It allows to unambiguously recompute completion
- *  poCInt after applying the fix-it.
+ *  point after applying the fix-it.
  *
  * The intuition is that provided fix-its change code around the identifier we
  * complete, but are not allowed to touch the identifier itself or the
@@ -7621,7 +7621,7 @@ fn CUInt defaultCodeCompleteOptions()
  * returned via a new \c CXCodeCompleteResults structure.
  *
  * Code completion itself is meant to be triggered by the client when the
- * user types punctuation characters or whitespace, at which poCInt the
+ * user types punctuation characters or whitespace, at which point the
  * code-completion location will coincide with the cursor. For example, if \c p
  * is a pointer, code-completion might be triggered after the "-" and then
  * after the ">" in \c p->. When the code-completion location is after the ">",
@@ -7650,7 +7650,7 @@ fn CUInt defaultCodeCompleteOptions()
  * \param complete_line The line at which code-completion should occur.
  *
  * \param complete_column The column at which code-completion should occur.
- * Note that the column should poCInt just after the syntactic construct that
+ * Note that the column should point just after the syntactic construct that
  * initiated code completion, and not in the middle of a lexical token.
  *
  * \param unsaved_files the Files that have not yet been saved to disk
@@ -7817,7 +7817,7 @@ fn void toggleCrashRecovery(
  */
 def CXInclusionVisitor = fn void(
   CXFile included_file,
-  CXSourceLocation *inclusion_stack,
+  CXSourceLocation* inclusion_stack,
   CUInt include_len,
   CXClientData client_data);
 
@@ -8018,7 +8018,7 @@ const CXResult RESULT_VISIT_BREAK = 2;
  *
  * \param visitor callback that will receive pairs of CXCursor/CXSourceRange for
  * each reference found.
- * The CXSourceRange will poCInt inside the file; if the reference is inside
+ * The CXSourceRange will point inside the file; if the reference is inside
  * a macro (and not a macro argument) the CXSourceRange will be invalid.
  *
  * \returns one of the CXResult enumerators.

@@ -1,4 +1,8 @@
-{ pkgs ? import <nixpkgs> {} }: with pkgs;
+{ 
+  mkShell,
+  libclang,
+  c3c,
+}:
 mkShell {
   buildInputs = [ 
     c3c
