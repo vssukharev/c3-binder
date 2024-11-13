@@ -1,6 +1,6 @@
 
-module binder::utils::args;
-import binder::utils::faults, std::io;
+module binder::utils;
+import std::io;
 
 /**
  * Processes command-line arguments and returns 

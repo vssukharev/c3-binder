@@ -1,0 +1,30 @@
+
+module binder::utils;
+import std::io;
+
+fn RetCode retcodeFromFault(
+  anyfault f) 
+{
+  RetCode rc;
+  switch (f) {
+    case ProgramErr.NO_INPUT_FILE: rc = 2;
+    case ProgramErr.FILE_MISSING: rc = 3;
+    case ProgramErr.PARSE_ERROR: rc = 4;
+    case ProgramErr.DIAGNOSTICS: rc = 5;
+    case ProgramErr.COMPILE_COMMANDS_MISSING: rc = 6;
+    default: rc = 1;
+  }
+  return rc;
+}
+
+fault ProgramErr {
+  NO_INPUT_FILE,
+  FILE_MISSING,
+  PARSE_ERROR,
+  DIAGNOSTICS,
+  COMPILE_COMMANDS_MISSING,
+  UNKNOWN,
+}
+
+
+

@@ -1,19 +1,18 @@
 
-module binder::diags;
-import std::io, clang;
+module binder;
+import std::io, clang, binder::utils;
 
-/*
- * Runs diagnostics and merely log them
+<*
+ * Runs diagnostics and log them
  * if some errors occured
  *
  * @param tu "Translation unit to be diagnosed"
  *
- * @return "Quantity of errors occured"
- */
-fn uint run(
-  CXTranslationUnit tu)
+ * @return "RetCode of quantity of errors occured"
+ *>
+fn void! runDiags(CXTranslationUnit tu)
 {
-  uint errors_count;
+  RetCode errors_count;
   
   CXDiagnosticSet diag_set = clang::getDiagnosticSetFromTU(tu);
   defer clang::disposeDiagnosticSet(diag_set);
@@ -34,17 +33,11 @@ fn uint run(
       CXString filename = clang::getFileName(file);
       defer clang::disposeString(filename);
 
-      io::eprintfn(
-        "(%s) %s: %s", 
-        clang::getCString(filename),
-        line,
-        clang::getCString(spelling)
-      );
-
+      io::eprintfn("(%s) %s: %s", clang::getCString(filename), line, clang::getCString(spelling));
       ++errors_count;
     }
   }
 
-  return errors_count;
+  if (errors_count != 0) return ProgramErr.DIAGNOSTICS?;
 }
 

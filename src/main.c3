@@ -1,17 +1,23 @@
 
 module binder;
-import binder::utils, clang, std::io;
+import clang, std::io;
 
 // Entry point
-fn void! main(String[] args) 
+fn RetCode main(String[] args) 
 {
   File out_file_handle;
   String in_file_name;
   
-  args::parseCommandArgs(args, &out_file_handle, &in_file_name)!;
+  if (catch exc = utils::parseCommandArgs(args, &out_file_handle, &in_file_name)) {
+    return utils::retcodeFromFault(exc);
+  }
   defer (void) out_file_handle.close();
   
-  trans::transFile(in_file_name, &out_file_handle)!;
+  if (catch exc = transFile(in_file_name, &out_file_handle)) {
+    return utils::retcodeFromFault(exc);
+  }
+
+  return 0;
 }
 
 

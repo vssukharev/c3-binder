@@ -1,12 +1,12 @@
 
-module binder::trans;
-import std::io, clang, binder::utils, binder::diags;
+module binder;
+import std::io, clang;
 
 struct CursorVisitData {
   int a;
 }
 
-/**
+<*
  * Translates 'in_file_name' and writes 
  * result to 'out_file_ptr'
  *
@@ -14,7 +14,7 @@ struct CursorVisitData {
  * @param [&out] out_file_ptr "Pointer to output file handle (can be stdout, for example)"
  *
  * @return! ProgramErr.PARSE_ERROR
- */
+ *>
 fn void! transFile(
   String in_file_name,
   File* out_file_ptr)
@@ -27,7 +27,7 @@ fn void! transFile(
     (ZString) in_file_name,
     null, 0,
     null, 0,
-    consts::TRANSLATION_UNIT_PARSE_FLAGS
+    utils::TRANSLATION_UNIT_PARSE_FLAGS
   );
 
   if (tu == null) {
@@ -35,32 +35,26 @@ fn void! transFile(
     return ProgramErr.PARSE_ERROR?;
   }
 
-  io::eprintn("--- Run diagnostics ---");
-  
-  if (diags::run(tu) != 0) {
-    io::eprintn("--- Some diagnostics failed ---");
-    return ProgramErr.DIAGNOSTICS?;
-  }
+  io::eprintn("--- Retrieve compile_commands.json ---");
+  CXCompileCommands comp_commands = retrieveCompileCommands()!;
+  io::eprintn("--- Compile commands retrieved successfully ---");
 
-  io::eprintn("--- Stop diagnostics ---");
+  io::eprintn("--- Run diagnostics ---");
+  runDiags(tu)!;
+  io::eprintn("--- Diagnosing finished successfully ---");
 
   CXCursor cursor = clang::getTranslationUnitCursor(tu);
   CursorVisitData visit_data = {};
 
   io::eprintn("--- Visiting children ---");
-  
-  clang::visitChildren(
-    cursor,
-    &mainVisitor,
-    (CXClientData) &visit_data
-  );
-  
+  clang::visitChildren(cursor, &mainVisitor, (CXClientData) &visit_data);
   io::eprintn("--- Stop visiting ---");
 }
 
-/**
+
+<*
  * Main visitor
- */
+ *>
 fn CXChildVisitResult mainVisitor(
   CXCursor cursor, 
   CXCursor parent, 
@@ -72,6 +66,7 @@ fn CXChildVisitResult mainVisitor(
 
   CXString cursor_spell = clang::getCursorDisplayName(cursor);
   defer clang::disposeString(cursor_spell);
+
   CXString cursor_kind_spell = clang::getCursorKindSpelling(cursor_kind);
   defer clang::disposeString(cursor_kind_spell);
 
@@ -82,12 +77,17 @@ fn CXChildVisitResult mainVisitor(
     io::eprintfn("Found builtin macro %s with value %s", cursor_name);
   }
 
-  io::eprintfn(
-    "(%s) '%s'", 
-    cursor_kind_name,
-    cursor_name
-  );
+  if (!isCursorNameSkippable(cursor_name)) {
+    io::eprintfn("(%s) '%s'", cursor_kind_name, cursor_name);
+  }
 
   return clang::CHILD_VISIT_RECURSE;
 }
+
+<*
+ * Detects whether cursor name worth to be processe!d
+ *>
+macro bool isCursorNameSkippable(ZString cursor_name) =>
+  cursor_name.len() > 2 && cursor_name[0..1] == "__";
+
 
