@@ -11,6 +11,7 @@ fn RetCode main(String[] args)
   if (catch exc = utils::parseCommandArgs(args, &out_file_handle, &in_file_name)) {
     return utils::retcodeFromFault(exc);
   }
+
   defer (void) out_file_handle.close();
   
   if (catch exc = transFile(in_file_name, &out_file_handle)) {

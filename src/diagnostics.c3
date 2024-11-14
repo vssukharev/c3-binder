@@ -3,13 +3,13 @@ module binder;
 import std::io, clang, binder::utils;
 
 <*
- * Runs diagnostics and log them
- * if some errors occured
- *
- * @param tu "Translation unit to be diagnosed"
- *
- * @return "RetCode of quantity of errors occured"
- *>
+  Runs diagnostics and log them
+  if some errors occured
+ 
+  @param tu "Translation unit to be diagnosed"
+ 
+  @return "RetCode of quantity of errors occured"
+*>
 fn void! runDiags(CXTranslationUnit tu)
 {
   RetCode errors_count;

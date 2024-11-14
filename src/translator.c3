@@ -7,14 +7,14 @@ struct CursorVisitData {
 }
 
 <*
- * Translates 'in_file_name' and writes 
- * result to 'out_file_ptr'
- *
- * @param in_file_name "Name of input file"
- * @param [&out] out_file_ptr "Pointer to output file handle (can be stdout, for example)"
- *
- * @return! ProgramErr.PARSE_ERROR
- *>
+  Translates 'in_file_name' and writes 
+  result to 'out_file_ptr'
+  
+  @param in_file_name "Name of input file"
+  @param [&out] out_file_ptr "Pointer to output file handle (can be stdout, for example)"
+  
+  @return! ProgramErr.PARSE_ERROR
+*>
 fn void! transFile(
   String in_file_name,
   File* out_file_ptr)
@@ -22,13 +22,7 @@ fn void! transFile(
   CXIndex index = clang::createIndex(0, 0);
   defer clang::disposeIndex(index);
 
-  CXTranslationUnit tu = clang::parseTranslationUnit(
-    index,
-    (ZString) in_file_name,
-    null, 0,
-    null, 0,
-    utils::TRANSLATION_UNIT_PARSE_FLAGS
-  );
+  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, utils::TRANSLATION_UNIT_PARSE_FLAGS);
 
   if (tu == null) {
     io::eprintfn("Failed to parse %s", in_file_name);
@@ -43,18 +37,17 @@ fn void! transFile(
   runDiags(tu)!;
   io::eprintn("--- Diagnosing finished successfully ---");
 
-  CXCursor cursor = clang::getTranslationUnitCursor(tu);
-  CursorVisitData visit_data = {};
-
   io::eprintn("--- Visiting children ---");
-  clang::visitChildren(cursor, &mainVisitor, (CXClientData) &visit_data);
+  CursorVisitData visit_data;
+  CXCursor cursor = clang::getTranslationUnitCursor(tu);
+  clang::visitChildren(cursor, &mainVisitor, (CXClientData)&visit_data);
   io::eprintn("--- Stop visiting ---");
 }
 
 
 <*
- * Main visitor
- *>
+  Main visitor
+*>
 fn CXChildVisitResult mainVisitor(
   CXCursor cursor, 
   CXCursor parent, 
@@ -73,10 +66,6 @@ fn CXChildVisitResult mainVisitor(
   ZString cursor_name = clang::getCString(cursor_spell);
   ZString cursor_kind_name = clang::getCString(cursor_kind_spell);
 
-  if (clang::isMacroBuiltin_Cursor(cursor)) {
-    io::eprintfn("Found builtin macro %s with value %s", cursor_name);
-  }
-
   if (!isCursorNameSkippable(cursor_name)) {
     io::eprintfn("(%s) '%s'", cursor_kind_name, cursor_name);
   }
@@ -85,8 +74,8 @@ fn CXChildVisitResult mainVisitor(
 }
 
 <*
- * Detects whether cursor name worth to be processe!d
- *>
+  Detects whether cursor name worth to be processe!d
+*>
 macro bool isCursorNameSkippable(ZString cursor_name) =>
   cursor_name.len() > 2 && cursor_name[0..1] == "__";
 

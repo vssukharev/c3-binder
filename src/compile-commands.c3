@@ -3,9 +3,9 @@ module binder;
 import std::io, clang;
 
 <*
- * Retrieves compile_commands.json from current directory
- * returned value shoulds then be freed with clang::dispose_CompileCommands
- *>
+  Retrieves compile_commands.json from current directory
+  returned value shoulds then be freed with clang::dispose_CompileCommands
+*>
 fn CXCompileCommands! retrieveCompileCommands(String filename = "")
 {
   io::eprintfn("Trying to find compile_commands.json in current directory");

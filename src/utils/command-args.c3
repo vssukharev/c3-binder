@@ -2,17 +2,17 @@
 module binder::utils;
 import std::io;
 
-/**
- * Processes command-line arguments and returns 
- * one of the ProgramErr
- *
- * Out file should be closed after finishing 
- * writing to it
- *
- * @param args "Command-line arguments"
- * @param [&out] out_ptr "Reference to output File"
- * @param [&out] in_name_ptr "Reference to input file name"
- */
+<*
+  Processes command-line arguments and returns 
+  one of the ProgramErr
+ 
+  Out file should be closed after finishing 
+  writing to it
+ 
+  @param args "Command-line arguments"
+  @param [&out] out_ptr "Reference to output File"
+  @param [&out] in_name_ptr "Reference to input file name"
+*>
 fn void! parseCommandArgs(
   String[] args, 
   File* out_ptr, 
