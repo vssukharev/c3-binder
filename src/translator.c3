@@ -24,7 +24,8 @@ fn void! transFile(
 
   CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, utils::TRANSLATION_UNIT_PARSE_FLAGS);
 
-  if (tu == null) {
+  if (tu == null) 
+  {
     io::eprintfn("Failed to parse %s", in_file_name);
     return ProgramErr.PARSE_ERROR?;
   }
@@ -43,7 +44,6 @@ fn void! transFile(
   clang::visitChildren(cursor, &mainVisitor, (CXClientData)&visit_data);
   io::eprintn("--- Stop visiting ---");
 }
-
 
 <*
   Main visitor
@@ -66,8 +66,24 @@ fn CXChildVisitResult mainVisitor(
   ZString cursor_name = clang::getCString(cursor_spell);
   ZString cursor_kind_name = clang::getCString(cursor_kind_spell);
 
-  if (!isCursorNameSkippable(cursor_name)) {
-    io::eprintfn("(%s) '%s'", cursor_kind_name, cursor_name);
+  if (!isCursorNameSkippable(cursor_name)) 
+  {
+    io::eprintfn("(%s) '%s'", cursor_kind_name, cursor_name, );
+    
+    if (clang::isPreprocessing(cursor_kind)) 
+    {
+      if (clang::isMacroFunctionLike_Cursor(cursor)) io::eprintn("\t> Function-like macro");
+      if (clang::isMacroBuiltin_Cursor(cursor)) io::eprintn("\t> Builtin macro");
+      String! macro_body = clexer::getMacroBody(cursor);
+      if (catch exc = macro_body) 
+      {
+        io::eprintfn("ERROR '%s': while getting macro body", exc);
+        return clang::CHILD_VISIT_RECURSE;
+      }
+      defer macro_body.free();
+
+      io::eprintfn("\t> Macro body: '%s'", macro_body);
+    }
   }
 
   return clang::CHILD_VISIT_RECURSE;

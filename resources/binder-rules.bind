@@ -1,0 +1,14 @@
+
+Function:
+  - "vk" (['A'-'Z']) name -> fn.minimize($1) name
+  - type "_" name -> name "_" type
+
+Type:
+  { - "uint16_t" -> "ushort" }
+  { - "uint32_t" -> "uint" }
+  { - "uint64_t" -> "ulong" }
+  { - "size_t" -> "usz" }
+
+Constant:
+  - name -> fn.constanize(name)
+
