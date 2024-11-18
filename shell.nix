@@ -11,6 +11,6 @@ mkShell {
 
   shellHook = ''zsh'';
 
-  LIBRARY_PATH = builtins.concatStringsSep ":" [ "${libclang.lib}/lib" ];
+  LIBRARY_PATH = "${libclang.lib}/lib";
 }
 

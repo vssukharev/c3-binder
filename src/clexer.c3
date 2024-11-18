@@ -10,7 +10,7 @@ import std::io, clang, binder::utils;
   @require clang::isPreprocessing(clang::getCursorKind(cursor)) "Cursor must point to preprocessing token"
 
   @return! IoError.EOF
-  @return! TranslatorErr.UNKNOWN_FILENAME
+  @return! TranslatorErr.FILE_MISSING
 *>
 fn String! getMacroBody(CXCursor cursor)
 {
@@ -20,25 +20,18 @@ fn String! getMacroBody(CXCursor cursor)
   CXSourceLocation name_loc = clang::getCursorLocation(cursor);
   clang::getExpansionLocation(name_loc, &file, null, null, &offset);
   
+  if (file == null) return TranslatorErr.FILE_MISSING?;
+
   CXString cx_filename = clang::getFileName(file); 
   defer clang::disposeString(cx_filename);
   ZString filename = clang::getCString(cx_filename);
 
-  if (filename == null) 
-  {
-    return TranslatorErr.UNKNOWN_FILENAME?;
-  } 
-  else
-  {
-    return readMacroBody(filename.str_view(), offset)!;
-  }
+  return readMacroBody(filename.str_view(), offset)!;
 }
 
 <*
   Reads basic macro body from given file with 
   given offset of beginning of macro declaration
-
-  TODO: skip comments
 *>
 fn String! readMacroBody(
   String filename,

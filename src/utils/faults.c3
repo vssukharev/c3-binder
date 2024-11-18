@@ -13,7 +13,7 @@ fn RetCode retcodeFromFault(
     case ProgramErr.PARSE_ERROR: rc = 4;
     case ProgramErr.DIAGNOSTICS: rc = 5;
     case ProgramErr.COMPILE_COMMANDS_MISSING: rc = 6;
-    case TranslatorErr.UNKNOWN_FILENAME: rc = 7;
+    case TranslatorErr.FILE_MISSING: rc = 7;
     default: rc = 1;
   }
   return rc;
@@ -31,7 +31,7 @@ fault ProgramErr
 
 fault TranslatorErr 
 {
-  UNKNOWN_FILENAME 
+  FILE_MISSING 
 }
 
 

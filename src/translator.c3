@@ -2,10 +2,6 @@
 module binder;
 import std::io, clang;
 
-struct CursorVisitData {
-  int a;
-}
-
 <*
   Translates 'in_file_name' and writes 
   result to 'out_file_ptr'
@@ -35,58 +31,20 @@ fn void! transFile(
   io::eprintn("--- Compile commands retrieved successfully ---");
 
   io::eprintn("--- Run diagnostics ---");
-  runDiags(tu)!;
-  io::eprintn("--- Diagnosing finished successfully ---");
+  if (catch exc = runDiags(tu))
+  {
+    io::eprintn("--- Several problems occured while running diagnostics ---");
+  }
+  else
+  {
+    io::eprintn("--- Diagnosing finished successfully ---");
+  }
 
   io::eprintn("--- Visiting children ---");
   CursorVisitData visit_data;
   CXCursor cursor = clang::getTranslationUnitCursor(tu);
   clang::visitChildren(cursor, &mainVisitor, (CXClientData)&visit_data);
   io::eprintn("--- Stop visiting ---");
-}
-
-<*
-  Main visitor
-*>
-fn CXChildVisitResult mainVisitor(
-  CXCursor cursor, 
-  CXCursor parent, 
-  CXClientData client_data)
-{
-  CursorVisitData* real_data = (CursorVisitData*) client_data;
-
-  CXCursorKind cursor_kind = clang::getCursorKind(cursor);
-
-  CXString cursor_spell = clang::getCursorDisplayName(cursor);
-  defer clang::disposeString(cursor_spell);
-
-  CXString cursor_kind_spell = clang::getCursorKindSpelling(cursor_kind);
-  defer clang::disposeString(cursor_kind_spell);
-
-  ZString cursor_name = clang::getCString(cursor_spell);
-  ZString cursor_kind_name = clang::getCString(cursor_kind_spell);
-
-  if (!isCursorNameSkippable(cursor_name)) 
-  {
-    io::eprintfn("(%s) '%s'", cursor_kind_name, cursor_name, );
-    
-    if (clang::isPreprocessing(cursor_kind)) 
-    {
-      if (clang::isMacroFunctionLike_Cursor(cursor)) io::eprintn("\t> Function-like macro");
-      if (clang::isMacroBuiltin_Cursor(cursor)) io::eprintn("\t> Builtin macro");
-      String! macro_body = clexer::getMacroBody(cursor);
-      if (catch exc = macro_body) 
-      {
-        io::eprintfn("ERROR '%s': while getting macro body", exc);
-        return clang::CHILD_VISIT_RECURSE;
-      }
-      defer macro_body.free();
-
-      io::eprintfn("\t> Macro body: '%s'", macro_body);
-    }
-  }
-
-  return clang::CHILD_VISIT_RECURSE;
 }
 
 <*

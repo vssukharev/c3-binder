@@ -53,7 +53,7 @@ extern "C" {
  * Include it unconditionally to avoid surprising side-effects.
  */
 #include <stddef.h>
- 
+
 /* Include because it is needed by Vulkan and related functions.
  * Include it unconditionally to avoid surprising side-effects.
  */
