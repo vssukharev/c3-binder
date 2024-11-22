@@ -1,6 +1,5 @@
 
 module binder::diags;
-import binder::defs;
 import std::io, clang;
 
 <*
@@ -9,11 +8,11 @@ import std::io, clang;
  
   @param tu "Translation unit to be diagnosed"
  
-  @return "RetCode of quantity of errors occured"
+  @return "Quantity of errors occured"
 *>
-fn RetCode runDiags(CXTranslationUnit tu)
+fn uint runDiags(CXTranslationUnit tu)
 {
-  RetCode errors_count;
+  uint errors_count;
   
   CXDiagnosticSet diag_set = clang::getDiagnosticSetFromTU(tu);
   defer clang::disposeDiagnosticSet(diag_set);

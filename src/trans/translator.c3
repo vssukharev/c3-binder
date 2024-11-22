@@ -1,6 +1,6 @@
 
 module binder::trans;
-import binder::diags, binder::defs;
+import binder::diags, binder::err;
 import std::io, clang;
 
 <*
@@ -19,7 +19,7 @@ fn void! transFile(
   CXIndex index = clang::createIndex(0, 0);
   defer clang::disposeIndex(index);
 
-  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, defs::TRANSLATION_UNIT_PARSE_FLAGS);
+  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, TRANSLATION_UNIT_PARSE_FLAGS);
 
   if (tu == null) 
   {
@@ -44,4 +44,11 @@ fn void! transFile(
   io::eprintn("--- Stop visiting ---");
 }
 
+const TRANSLATION_UNIT_PARSE_FLAGS =
+  clang::TRANSLATION_UNIT_DETAILED_PREPROCESSING_RECORD
+| clang::TRANSLATION_UNIT_INCLUDE_ATTRIBUTED_TYPES
+| clang::TRANSLATION_UNIT_IGNORE_NON_ERRORS_FROM_INCLUDED_FILES
+// | clang::TRANSLATION_UNIT_RETAIN_EXCLUDED_CONDITIONAL_BLOCKS
+// | clang::TRANSLATION_UNIT_SINGLE_FILE_PARSE
+;
 

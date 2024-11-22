@@ -1,6 +1,6 @@
 
 module binder::command_args;
-import binder::defs;
+import binder::err;
 import std::io;
 
 <*

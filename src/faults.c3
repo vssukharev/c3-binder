@@ -1,11 +1,11 @@
 
-module binder::defs;
+module binder::err;
 import std::io;
 
-fn RetCode retcodeFromFault(
+fn int retcodeFromFault(
   anyfault f) 
 {
-  RetCode rc;
+  int rc;
   switch (f) 
   {
     case ProgramErr.NO_INPUT_FILE: rc = 2;
