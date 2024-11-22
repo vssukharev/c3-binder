@@ -1,6 +1,7 @@
 
-module binder;
-import std::io, clang, binder::utils;
+module binder::diags;
+import std::io, clang;
+import binder::defs;
 
 <*
   Runs diagnostics and log them
@@ -10,7 +11,7 @@ import std::io, clang, binder::utils;
  
   @return "RetCode of quantity of errors occured"
 *>
-fn void! runDiags(CXTranslationUnit tu)
+fn RetCode runDiags(CXTranslationUnit tu)
 {
   RetCode errors_count;
   
@@ -38,6 +39,6 @@ fn void! runDiags(CXTranslationUnit tu)
     }
   }
 
-  if (errors_count != 0) return ProgramErr.DIAGNOSTICS?;
+  return errors_count;
 }
 

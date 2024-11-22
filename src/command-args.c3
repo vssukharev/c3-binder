@@ -1,5 +1,6 @@
 
-module binder::utils;
+module binder::command_args;
+import binder::faults;
 import std::io;
 
 <*

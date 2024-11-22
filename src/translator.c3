@@ -1,5 +1,6 @@
 
-module binder;
+module binder::trans;
+import binder::faults, binder::diags, binder::consts, binder::visitor;
 import std::io, clang;
 
 <*
@@ -18,7 +19,7 @@ fn void! transFile(
   CXIndex index = clang::createIndex(0, 0);
   defer clang::disposeIndex(index);
 
-  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, utils::TRANSLATION_UNIT_PARSE_FLAGS);
+  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, consts::TRANSLATION_UNIT_PARSE_FLAGS);
 
   if (tu == null) 
   {
@@ -26,12 +27,8 @@ fn void! transFile(
     return ProgramErr.PARSE_ERROR?;
   }
 
-  io::eprintn("--- Retrieve compile_commands.json ---");
-  CXCompileCommands comp_commands = retrieveCompileCommands()!;
-  io::eprintn("--- Compile commands retrieved successfully ---");
-
   io::eprintn("--- Run diagnostics ---");
-  if (catch exc = runDiags(tu))
+  if (diags::runDiags(tu) > 0)
   {
     io::eprintn("--- Several problems occured while running diagnostics ---");
   }
@@ -43,14 +40,8 @@ fn void! transFile(
   io::eprintn("--- Visiting children ---");
   CursorVisitData visit_data;
   CXCursor cursor = clang::getTranslationUnitCursor(tu);
-  clang::visitChildren(cursor, &mainVisitor, (CXClientData)&visit_data);
+  clang::visitChildren(cursor, &visitor::mainVisitor, (CXClientData)&visit_data);
   io::eprintn("--- Stop visiting ---");
 }
-
-<*
-  Detects whether cursor name worth to be processe!d
-*>
-macro bool isCursorNameSkippable(ZString cursor_name) =>
-  cursor_name.len() > 2 && cursor_name[0..1] == "__";
 
 

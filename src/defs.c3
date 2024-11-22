@@ -1,5 +1,5 @@
 
-module binder::utils;
+module binder::defs;
 
 def RetCode = int;
 

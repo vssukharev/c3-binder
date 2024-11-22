@@ -1,6 +1,7 @@
 
 module binder::clexer;
-import std::io, clang, binder::utils;
+import binder::faults;
+import std::io, clang;
 
 <*
   Gets macro body of a given cursor

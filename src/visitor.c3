@@ -1,5 +1,6 @@
 
-module binder;
+module binder::visitor;
+import binder::clexer;
 import std::io, clang;
 
 struct CursorVisitData {

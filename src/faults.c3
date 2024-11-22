@@ -1,5 +1,6 @@
 
-module binder::utils;
+module binder::faults;
+import binder::defs;
 import std::io;
 
 fn RetCode retcodeFromFault(
