@@ -49,14 +49,21 @@ fn String! readMacroBody(
   file.read(buffer[..])!;
 
   // Skip until ' '
-  char c;
-  while (c != ' ')
   {
-    c = peekNext(&offset, buffer[..], file);
-    if (c == 0) 
+    bool seek_finish;
+    char c;
+    while (true)
     {
-      file.read(buffer[..])!; 
-      continue;
+      c = peekNext(&offset, buffer[..], file);
+      if (c == ' ') 
+      {
+        seek_finish = true;
+      }
+      else if (seek_finish && c != ' ')
+      {
+        --offset;
+        break;
+      }
     }
   }
 
@@ -66,10 +73,11 @@ fn String! readMacroBody(
     res.temp_init(16);
 
     // Read everything after ' '
+    char c;
     while (true)
     {
       c = peekNext(&offset, buffer[..], file);
-      
+
       switch
       {
         case c == '\\':
@@ -80,7 +88,7 @@ fn String! readMacroBody(
           }
           else
           {
-            c = peekPrev(offset, buffer[..]);
+            c = '\\';
             --offset;
           }
 
