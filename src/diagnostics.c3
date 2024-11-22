@@ -1,7 +1,7 @@
 
 module binder::diags;
-import std::io, clang;
 import binder::defs;
+import std::io, clang;
 
 <*
   Runs diagnostics and log them

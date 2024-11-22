@@ -1,5 +1,5 @@
 
-module binder::consts;
+module binder::defs;
 import clang;
 
 const TRANSLATION_UNIT_PARSE_FLAGS =

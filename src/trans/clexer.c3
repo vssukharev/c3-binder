@@ -1,6 +1,6 @@
 
-module binder::clexer;
-import binder::faults;
+module binder::trans::clexer;
+import binder::defs;
 import std::io, clang;
 
 <*

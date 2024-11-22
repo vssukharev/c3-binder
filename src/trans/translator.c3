@@ -1,6 +1,6 @@
 
 module binder::trans;
-import binder::faults, binder::diags, binder::consts, binder::visitor;
+import binder::diags, binder::defs;
 import std::io, clang;
 
 <*
@@ -19,7 +19,7 @@ fn void! transFile(
   CXIndex index = clang::createIndex(0, 0);
   defer clang::disposeIndex(index);
 
-  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, consts::TRANSLATION_UNIT_PARSE_FLAGS);
+  CXTranslationUnit tu = clang::parseTranslationUnit(index, (ZString)in_file_name, null, 0, null, 0, defs::TRANSLATION_UNIT_PARSE_FLAGS);
 
   if (tu == null) 
   {
