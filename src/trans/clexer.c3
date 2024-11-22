@@ -59,7 +59,7 @@ fn String! readMacroBody(
       {
         seek_finish = true;
       }
-      else if (seek_finish && c != ' ')
+      else if (c == '\n' || (seek_finish && c != ' ')) // terminate if find new line
       {
         --offset;
         break;
@@ -72,7 +72,7 @@ fn String! readMacroBody(
     DString res;
     res.temp_init(16);
 
-    // Read everything after ' '
+    // Read everything after '1'
     char c;
     while (true)
     {
